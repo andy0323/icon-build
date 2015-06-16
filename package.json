@@ -1,0 +1,11 @@
+{
+  "name": "icon_builder",
+  "version": "1.0.0",
+  "description": "Create Icons Tool",
+  "main": "index.js",
+  "scripts": {
+    "test": "node bin/icon-builder test/icon-1024.png"
+  },
+  "author": "AndyJin",
+  "license": "ISC"
+}

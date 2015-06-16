@@ -1,0 +1,48 @@
+#!/usr/bin/env node
+
+require('shelljs/global');
+var fs = require('fs');
+var gm = require('gm');
+var path = require('path');
+var imageMagick = gm.subClass({ imageMagick : true });
+
+var program = require('commander');
+program
+  .version(require("../package.json").version)
+    .usage("")
+  .parse(process.argv);
+var args = program.args;
+
+
+const ICON_BUILD_DIR = "__icons__";
+
+var path = args[0];
+
+// prepare build dir
+exec('rm -rf ' + ICON_BUILD_DIR);
+exec('mkdir ' + ICON_BUILD_DIR);
+
+// read conf
+var icons = JSON.parse(fs.readFileSync(__dirname + '/../conf/ios.conf', 'utf-8')).icons;
+
+create(path, icons);
+
+function create (path, iconConf){
+	for (var i = 0; i < icons.length; i++) {
+		var icon = icons[i];
+		iconResize(path, icon.width, icon.height, ICON_BUILD_DIR + '/' + icon.name);		
+	};
+}
+
+function iconResize(sourcePath, sizeWidth, sizeHeight, filePath) {
+	imageMagick(sourcePath)
+    .resize(sizeWidth, sizeHeight)
+    .autoOrient()
+    .write(filePath, function(err){
+     	if (err) {
+     		console.log('resize failed  ' + filePath);
+     	}else {
+     		console.log('resize success  ' + filePath);
+     	}
+    });	
+}
