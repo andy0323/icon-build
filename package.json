@@ -1,6 +1,6 @@
 {
   "name": "icon-build",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Create Icons Tool",
   "main": "index.js",
   "scripts": {
@@ -15,5 +15,10 @@
   "repository": {
     "type": "git",
     "url": "git://github.com/andy0323/icon-build"
+  },
+  "dependencies": {
+    "commander": "^2.8.1",
+    "gm": "^1.18.1",
+    "shelljs": "^0.5.1"
   }
 }
