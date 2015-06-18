@@ -1,11 +1,19 @@
 {
-  "name": "icon_builder",
+  "name": "icon-build",
   "version": "1.0.0",
   "description": "Create Icons Tool",
   "main": "index.js",
   "scripts": {
-    "test": "node bin/icon-builder test/icon-1024.png"
+    "test": "node bin/icon-build test/icon-1024.png"
   },
   "author": "AndyJin",
-  "license": "ISC"
+  "license": "ISC",
+  "preferGlobal": "true",
+  "bin": {
+    "icon-build": "./bin/icon-build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/andy0323/icon-build"
+  }
 }

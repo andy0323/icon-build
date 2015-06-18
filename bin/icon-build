@@ -1,5 +1,7 @@
 #!/usr/bin/env node
 
+const ICON_BUILD_DIR = "__icon__" + Date.now();
+
 require('shelljs/global');
 var fs = require('fs');
 var gm = require('gm');
@@ -13,24 +15,49 @@ program
   .parse(process.argv);
 var args = program.args;
 
+if (args.length == 0) {
+    console.log('Usage：icon-build ${ICON_PATH_1024*1024}'); 
+    return;
+}
 
-const ICON_BUILD_DIR = "__icons__";
+var filePath = args[0];
+if (!fs.existsSync(filePath)) {
+    console.log('PATH ERROR： ' + filePath);;
+    return;
+}
 
-var path = args[0];
+var extname = path.extname(filePath);
+if (extname != '.png') {
+    console.log('FILE_EXT_ERROR. please rename icon file like **.png');
+    return;
+};
+
+gm(filePath)
+.size(function (err, size) {
+    if (err) {
+        console.log('FILE ERROR：file type error');    
+        return;
+    }
+    
+    if (size.height != size.width || size.height < 1024 && size.width < 1024) {
+        console.log('FILE ERROR：please check your icon size.');    
+        return;
+    }
+});
 
 // prepare build dir
-exec('rm -rf ' + ICON_BUILD_DIR);
 exec('mkdir ' + ICON_BUILD_DIR);
 
 // read conf
 var icons = JSON.parse(fs.readFileSync(__dirname + '/../conf/ios.conf', 'utf-8')).icons;
 
-create(path, icons);
+// start 
+create(filePath, icons);
 
-function create (path, iconConf){
+function create (sourcePath, iconConf){
 	for (var i = 0; i < icons.length; i++) {
 		var icon = icons[i];
-		iconResize(path, icon.width, icon.height, ICON_BUILD_DIR + '/' + icon.name);		
+		iconResize(sourcePath, icon.width, icon.height, ICON_BUILD_DIR + '/' + icon.name);		
 	};
 }
 
